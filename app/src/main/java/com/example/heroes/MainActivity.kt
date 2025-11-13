@@ -4,22 +4,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.heroes.model.Heroe
 import com.example.heroes.ui.theme.HeroesTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,9 +37,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HeroesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
                     Display()
-                }
+
             }
         }
     }
@@ -38,30 +47,66 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Display() {
-    Registro()
+
 }
 
 @Composable
-fun Registro(modifier: Modifier = Modifier){
+fun Registro(heroe: Heroe, modifier: Modifier = Modifier){
+    Card(
+        colors = CardDefaults.cardColors(
 
-    Card(modifier = modifier.padding(8.dp).fillMaxWidth()){
-        Row{
-            Column{
-                Text(text = "Nombre")
-                Text(text = "Descripcion")
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface
+        )
+    ){
+        Row(modifier = Modifier
+            .height(72.dp)
+            .fillMaxWidth()
+            .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
 
-            }
-            Image(modifier = Modifier.height(72.dp),
-                painter = painterResource(R.drawable.android_superhero1),
-                contentDescription = null,
-            )
+           Informacion(nombre = heroe.nombre, descripcion = heroe.descripcion)
+            Foto(heroe.imagen)
         }
+
+
     }
+
 }
-@Preview(showBackground = true, showSystemUi = true)
+
+//Composable que contiene la informacion del superheroe
+@Composable
+fun Informacion(
+    @StringRes nombre: Int,
+    @StringRes descripcion: Int,
+    modifier: Modifier = Modifier
+){
+    Column() {
+        Text(
+            text = nombre.toString(),
+            style = MaterialTheme.typography.displayMedium)
+        Text(
+            text = descripcion.toString(),
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+
+    }
+
+}
+@Composable
+fun Foto(@StringRes foto: Int){
+    Image(
+        painter = painterResource(id = foto),
+        contentDescription = null,
+    )
+}
+
+@Preview(showBackground = true)
 @Composable
 fun DisplayPreview() {
     HeroesTheme {
-        Display()
+        Registro(heroe = Heroe(R.string.hero1, R.string.description1, R.drawable.android_superhero1))
     }
 }
