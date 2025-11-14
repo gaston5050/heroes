@@ -1,4 +1,4 @@
-package com.example.Heroes.model
+package com.example.heroes.model
 
 import androidx.compose.material3.R
 import com.example.heroes.model.Heroe
